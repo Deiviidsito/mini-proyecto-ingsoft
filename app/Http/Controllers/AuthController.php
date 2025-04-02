@@ -12,12 +12,13 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    public function register(Request $request){
+    public function register(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|min:3,max:100',
-            'role_id' => 'required|exists:roles,id',
             'email' => 'required|string|email|min:10|max:100|unique:users',
             'password' => 'required|string|min:6|max:100|confirmed',
+            'role_id' => 'nullable|exists:roles,id', // Hacemos role_id opcional
         ]);
 
         if($validator->fails()){
@@ -26,9 +27,9 @@ class AuthController extends Controller
 
         User::create([
             'name' => $request->get('name'),
-            'role_id' => $request->get('role_id'),
             'email' => $request->get('email'),
             'password' => bcrypt($request->get('password')),
+            'role_id' => $request->get('role_id', 2), // 2 sería el ID del rol 'user'
         ]);
 
         return response()->json(['message' => 'User created successfully'], 201);

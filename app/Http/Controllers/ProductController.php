@@ -11,8 +11,8 @@ class ProductController extends Controller
 {
     public function addProduct(Request $request){
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|min:3,max,100',
-            'price' => 'required'|'numeric',
+            'name' => 'required|string|min:3|max:100', // Corregido: comas por pipes
+            'price' => 'required|numeric', // Corregido: eliminada concatenación incorrecta
         ]);
         if($validator->fails()){
             return response()->json(['error' => $validator->errors()], 422);
@@ -46,8 +46,8 @@ class ProductController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|string|min:3,max,100',
-            'price' => 'required'|'numeric',
+            'name' => 'sometimes|string|min:3|max:100', // Corregido: comas por pipes
+            'price' => 'required|numeric', // Corregido: eliminada concatenación incorrecta
         ]);
         if($validator->fails()){
             return response()->json(['error' => $validator->errors()], 422);

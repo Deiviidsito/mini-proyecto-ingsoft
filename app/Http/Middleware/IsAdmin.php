@@ -8,18 +8,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IsAdmin
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
         $user = auth('api')->user();
-        if($user && $user->role_id == 1){ // Admin
+        if($user && $user->role_id == 1){
             return $next($request);
-        }else{
-            return response()->json(['message' => 'Unauthorized'], 403);
         }
+        return response()->json([
+            'mensaje' => 'Acceso denegado',
+            'detalles' => 'No tiene los permisos necesarios para realizar esta acción. Se requiere rol de administrador'
+        ], 403);
     }
 }
