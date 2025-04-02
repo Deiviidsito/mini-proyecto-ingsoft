@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -13,20 +14,23 @@ class AuthController extends Controller
 {
     public function register(Request $request){
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|min:3,max,100',
-            'role' => 'required|string|min:3,max,100',
+            'name' => 'required|string|min:3,max:100',
+            'role_id' => 'required|exists:roles,id',
             'email' => 'required|string|email|min:10|max:100|unique:users',
             'password' => 'required|string|min:6|max:100|confirmed',
         ]);
+
         if($validator->fails()){
             return response()->json(['error' => $validator->errors()], 422);
         }
+
         User::create([
             'name' => $request->get('name'),
-            'role' => $request->get('role'),
+            'role_id' => $request->get('role_id'),
             'email' => $request->get('email'),
             'password' => bcrypt($request->get('password')),
         ]);
+
         return response()->json(['message' => 'User created successfully'], 201);
     }
 
