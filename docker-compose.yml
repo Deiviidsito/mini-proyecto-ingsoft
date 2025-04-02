@@ -2,11 +2,11 @@ version: "3.9"
 
 services:
     ucn_db:
-        container_name: mini-proyecto-ucn_db
+        container_name: ingsoftdb
         image: mysql
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: mini-proyecto-ucn_db
+            MYSQL_DATABASE: ingsoftdb
         restart: always
         ports:
-            - "3303:3306"
+            - "3307:3306"
